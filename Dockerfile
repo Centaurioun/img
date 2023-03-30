@@ -22,7 +22,7 @@ RUN make static && mv img /usr/bin/img
 #     b) install newuidmap/newgidmap >= 20181125 (59c2dabb264ef7b3137f5edb52c0b31d5af0cf76)
 #    We choose b) until kernel >= 4.14 gets widely adopted.
 #    See https://github.com/shadow-maint/shadow/pull/132 https://github.com/shadow-maint/shadow/pull/138 https://github.com/shadow-maint/shadow/pull/141
-FROM alpine:3.11 AS idmap
+FROM alpine:3.14 AS idmap
 RUN apk add --no-cache autoconf automake build-base byacc gettext gettext-dev gcc git libcap-dev libtool libxslt
 RUN git clone https://github.com/shadow-maint/shadow.git /shadow
 WORKDIR /shadow
@@ -31,7 +31,7 @@ RUN ./autogen.sh --disable-nls --disable-man --without-audit --without-selinux -
   && make \
   && cp src/newuidmap src/newgidmap /usr/bin
 
-FROM alpine:3.11 AS base
+FROM alpine:3.14 AS base
 MAINTAINER Jessica Frazelle <jess@linux.com>
 RUN apk add --no-cache git pigz
 COPY --from=img /usr/bin/img /usr/bin/img
